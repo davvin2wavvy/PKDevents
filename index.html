@@ -1,187 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PK Dream Events</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            background-color: #ffe6f0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>PK Dream Events</title>
+  <style>
+    :root{
+      --brand:#ff66a3;
+      --brand-dark:#ff4d94;
+      --accent:#99ffff;
+      --accent-glow:#66ffff;
+      --bg:#ffe6f0;
+      --ink:#333;
+      --nav:#000;
+    }
 
-        .main-content {
-            display: flex;
-            min-height: 100vh;
-        }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
 
-        aside {
-            width: 240px;
-            background-color: #000;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            right: 0;
-            padding: 40px 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 40px;
-            z-index: 10;
-        }
+    /* ====== Header / Nav ====== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 16px;
+    }
+    .brand {
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 6px;
+      transition: background .25s ease;
+    }
+    .nav a:hover,
+    .nav a.active {
+      background: var(--brand);
+      color: #000;
+    }
+    .cta {
+      background: var(--brand);
+      color: #000 !important;
+      border-radius: 999px;
+      padding: 10px 14px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+    }
 
-        aside a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 10px;
-            transition: background 0.3s, color 0.3s;
-        }
+    /* Hamburger (mobile) */
+    .burger {
+      display: none;
+      width: 44px; height: 44px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 10px;
+      background: transparent;
+      color: #fff;
+      align-items: center; justify-content: center;
+    }
+    .burger:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
-        aside a:hover {
-            background-color: #ff66a3;
-            color: black;
-            border-radius: 4px;
-        }
+    /* ====== Layout ====== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+    }
 
-        .home, .gallery, .about {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-right: 240px;
-            width: calc(100% - 240px);
-            padding: 40px;
-        }
+    /* Sections */
+    .section { display: none; }
+    .section.active { display: block; }
 
-        .home img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 0 25px #ff66a3;
-        }
+    /* Home */
+    .home-hero {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .home-hero img {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 0 25px var(--brand);
+    }
 
-        .gallery {
-            position: relative;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+      border: 6px solid var(--accent);
+      box-shadow: 0 0 16px var(--accent-glow);
+      transition: transform .2s ease;
+      cursor: zoom-in;
+    }
+    .gallery-grid img:active { transform: scale(.98); }
 
-        .gallery img {
-            width: 90%;
-            max-width: 500px;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 0 30px #66ffff;
-            border: 6px solid #99ffff;
-        }
+    /* About */
+    .about-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff0f5;
+      border-radius: 16px;
+      padding: 20px;
+      line-height: 1.6;
+      box-shadow: 0 4px 15px rgba(0,0,0,.1);
+      text-align: center;
+    }
+    .about-card img {
+      width: 100%;
+      height: auto;
+      margin-top: 16px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px var(--brand);
+    }
+    .follow-button {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: var(--brand);
+      color: #000;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+      transition: background .2s ease, transform .1s ease;
+    }
+    .follow-button:hover { background: var(--brand-dark); }
+    .follow-button:active { transform: translateY(1px); }
 
-        .about-container {
-            max-width: 800px;
-            padding: 20px;
-            color: #333;
-            font-size: 16px;
-            background-color: #fff0f5;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            line-height: 1.6;
-            text-align: center;
-        }
+    /* Large screens: show inline links, hide burger */
+    @media (min-width: 769px) {
+      .burger { display: none; }
+      .nav-links { display: flex; }
+    }
+    /* Small screens: hamburger menu */
+    @media (max-width: 768px) {
+      .burger { display: inline-flex; }
+      .nav-links {
+        position: fixed;
+        top: 64px; /* header height approx */
+        right: 12px;
+        left: 12px;
+        display: none;
+        flex-direction: column;
+        background: #111;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 14px;
+        padding: 10px;
+        box-shadow: 0 12px 24px rgba(0,0,0,.4);
+      }
+      .nav-links.open { display: flex; }
+      .nav a { padding: 12px; }
+      .container { padding: 20px 14px 56px; }
+    }
 
-        .about img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px #ff66a3;
-        }
-
-        .follow-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background-color: #ff66a3;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: background 0.3s;
-        }
-
-        .follow-button:hover {
-            background-color: #ff4d94;
-        }
-
-        @media screen and (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            aside {
-                position: static;
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                justify-content: space-around;
-                padding: 20px;
-            }
-            .home, .gallery, .about {
-                margin: 0;
-                width: 100%;
-                padding: 20px;
-            }
-        }
-    </style>
+    /* Motion safety */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="main-content">
-        <aside>
-            <a href="#" onclick="showSection('home')">Home</a>
-            <a href="#" onclick="showSection('gallery')">Gallery</a>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdOhW-UBtMkRHyqIsCiS9xi3yliJGW7ygf2DFzLmMIsHcPX_g/viewform?usp=header" target="_blank">Book Consultation</a>
-            <a href="#" onclick="showSection('about')">About Me</a>
-        </aside>
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <div class="brand">PK Dream Events</div>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="#home" data-section="home" class="active">Home</a>
+        <a href="#gallery" data-section="gallery">Gallery</a>
+        <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdOhW-UBtMkRHyqIsCiS9xi3yliJGW7ygf2DFzLmMIsHcPX_g/viewform?usp=header" target="_blank" rel="noopener">Book Consultation</a>
+        <a href="#about" data-section="about">About Me</a>
+      </div>
+    </nav>
+  </header>
 
-        <div class="home" id="home">
-            <img src="PkOverall.png" alt="PK Dream Events Overview">
-        </div>
+  <main class="container">
+    <!-- HOME -->
+    <section class="section home active" id="home" tabindex="-1" aria-labelledby="home-title">
+      <h1 id="home-title" class="visually-hidden">PK Dream Events</h1>
+      <div class="home-hero">
+        <img src="PkOverall.png" alt="PK Dream Events overview collage" loading="eager">
+      </div>
+    </section>
 
-        <div class="gallery" id="gallery">
-            <img src="birthdayCake.jpeg" alt="Birthday Cake Showcase">
-            <img src="chartGrape.jpeg" alt="Grape Charcuterie Board">
-            <img src="grapesNflowers.jpeg" alt="Grapes and Flowers Setup">
-            <img src="helloHitty.jpeg" alt="Hello Kitty Theme">
-            <img src="lamore.jpeg" alt="Lamore Decor">
-            <img src="wine.jpeg" alt="Wine Table Setup">
-            <img src="50.jpeg" alt="50th Celebration">
-            <img src="50celebration.jpeg" alt="50 Celebration Decor">
-        </div>
+    <!-- GALLERY -->
+    <section class="section gallery" id="gallery" tabindex="-1" aria-labelledby="gallery-title">
+      <h2 id="gallery-title" style="text-align:center; margin: 8px 0 16px;">Gallery</h2>
+      <div class="gallery-grid" id="galleryGrid">
+        <img src="birthdayCake.jpeg" alt="Birthday cake showcase" loading="lazy">
+        <img src="chartGrape.jpeg" alt="Grape charcuterie board" loading="lazy">
+        <img src="grapesNflowers.jpeg" alt="Grapes and flowers setup" loading="lazy">
+        <img src="helloHitty.jpeg" alt="Hello Kitty theme table" loading="lazy">
+        <img src="lamore.jpeg" alt="Lamore décor" loading="lazy">
+        <img src="wine.jpeg" alt="Wine table setup" loading="lazy">
+        <img src="50.jpeg" alt="50th celebration" loading="lazy">
+        <img src="50celebration.jpeg" alt="50 celebration décor" loading="lazy">
+      </div>
+    </section>
 
-        <div class="about" id="about">
-            <div class="about-container">
-                <p>Welcome to my world of event planning! My passion for crafting unforgettable experiences began in childhood, where I loved decorating birthday parties for my kids. As I grew older, I recognized that every occasion—big or small—deserves to be celebrated, from life’s milestones to everyday moments. Friends often encouraged me to become an event coordinator, seeing my enthusiasm for making life fun and memorable.</p>
-                <p>My journey started when I planned a college send-off party, followed by a heartfelt 90th birthday celebration. These experiences allowed me to unleash my creativity and truly understand my clients' visions. I thrive on transforming dreams into reality, celebrating all of life’s occasions, and making each moment worth living. Let’s work together to make your special moments truly extraordinary!</p>
-                <img src="aboutMe.jpeg" alt="About Me Photo">
-                <a href="https://www.instagram.com/pkdreamevents1?igsh=NTc4MTIwNjQ2YQ==" target="_blank" class="follow-button">Follow Me</a>
-            </div>
-        </div>
-    </div>
+    <!-- ABOUT -->
+    <section class="section about" id="about" tabindex="-1" aria-labelledby="about-title">
+      <h2 id="about-title" style="text-align:center; margin: 8px 0 16px;">About Me</h2>
+      <div class="about-card">
+        <p>Welcome to my world of event planning! My passion for crafting unforgettable experiences began in childhood, where I loved decorating birthday parties for my kids. As I grew older, I recognized that every occasion—big or small—deserves to be celebrated, from life’s milestones to everyday moments. Friends often encouraged me to become an event coordinator, seeing my enthusiasm for making life fun and memorable.</p>
+        <p>My journey started when I planned a college send-off party, followed by a heartfelt 90th birthday celebration. These experiences allowed me to unleash my creativity and truly understand my clients' visions. I thrive on transforming dreams into reality, celebrating all of life’s occasions, and making each moment worth living. Let’s work together to make your special moments truly extraordinary!</p>
+        <img src="aboutMe.jpeg" alt="Portrait of the planner" loading="lazy">
+        <a href="https://www.instagram.com/pkdreamevents1?igsh=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener" class="follow-button">Follow Me</a>
+      </div>
+    </section>
+  </main>
 
-<script>
-        function showSection(sectionId) {
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('gallery').style.display = 'none';
-            document.getElementById('about').style.display = 'none';
-            document.getElementById(sectionId).style.display = 'flex';
+  <script>
+    // ===== Minimal JS for navigation + sections =====
+    (function(){
+      const links = document.querySelectorAll('[data-section]');
+      const sections = document.querySelectorAll('.section');
+      const burger = document.getElementById('burger');
+      const navLinks = document.getElementById('nav-links');
+
+      function setActive(id){
+        sections.forEach(s => s.classList.toggle('active', s.id === id));
+        links.forEach(a => a.classList.toggle('active', a.dataset.section === id));
+        // Move focus for accessibility
+        const target = document.getElementById(id);
+        if (target) target.focus({ preventScroll: true });
+        // Close mobile menu if open
+        navLinks.classList.remove('open');
+        burger.setAttribute('aria-expanded','false');
+      }
+
+      // Click on nav links
+      links.forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = a.dataset.section;
+          setActive(id);
+          history.replaceState(null, '', `#${id}`); // Update hash
+          // Smooth scroll to top of main on mobile for better UX
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Burger toggle
+      burger.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        burger.setAttribute('aria-expanded', String(open));
+      });
+
+      // Deep link support
+      const hash = (location.hash || '#home').replace('#','');
+      if (document.getElementById(hash)) setActive(hash);
+
+      // Close menu when clicking outside (mobile)
+      document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && e.target !== burger) {
+          navLinks.classList.remove('open');
+          burger.setAttribute('aria-expanded','false');
         }
+      });
 
-        showSection('home');
-</script>
+      // Optional: simple tap-to-zoom lightbox (no dependencies)
+      const gallery = document.getElementById('galleryGrid');
+      if (gallery){
+        gallery.addEventListener('click', (e) => {
+          const img = e.target.closest('img');
+          if (!img) return;
+          const overlay = document.createElement('div');
+          overlay.style.cssText = `
+            position:fixed; inset:0; background:rgba(0,0,0,.9);
+            display:grid; place-items:center; z-index:9999; padding:16px; cursor:zoom-out;
+          `;
+          const large = document.createElement('img');
+          large.src = img.src;
+          large.alt = img.alt || '';
+          large.style.cssText = 'max-width:95vw; max-height:85vh; border-radius:16px;';
+          overlay.appendChild(large);
+          overlay.addEventListener('click', () => overlay.remove());
+          document.body.appendChild(overlay);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
